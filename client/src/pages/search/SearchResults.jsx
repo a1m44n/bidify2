@@ -18,6 +18,10 @@ const SearchResults = () => {
     // Get search parameters from URL
     const searchParams = new URLSearchParams(location.search);
     const query = searchParams.get('query');
+    const category = searchParams.get('category');
+    const condition = searchParams.get('condition');
+    const minPrice = searchParams.get('minPrice');
+    const maxPrice = searchParams.get('maxPrice');
     const page = parseInt(searchParams.get('page')) || 1;
 
     useEffect(() => {
@@ -30,6 +34,10 @@ const SearchResults = () => {
                 if (query) queryParams.append('query', query);
                 queryParams.append('page', page);
                 queryParams.append('limit', 20);
+                if (category) queryParams.append('category', category);
+                if (condition) queryParams.append('condition', condition);
+                if (minPrice) queryParams.append('minPrice', minPrice);
+                if (maxPrice) queryParams.append('maxPrice', maxPrice);
 
                 const url = `/product/search?${queryParams}`;
                 const response = await api.get(url);
@@ -58,7 +66,7 @@ const SearchResults = () => {
         };
 
         fetchResults();
-    }, [query, page]);
+    }, [query, category, condition, minPrice, maxPrice, page]);
 
     // Handle page change
     const handlePageChange = (newPage) => {
@@ -81,7 +89,26 @@ const SearchResults = () => {
                 )}
             </div>
 
-
+            {/* Active filters */}
+            {(category || condition || minPrice || maxPrice) && (
+                <div className="mb-6 flex flex-wrap gap-2">
+                    {category && (
+                        <span className="px-3 py-1 bg-gray-100 rounded-full text-sm">
+                            Category: {category}
+                        </span>
+                    )}
+                    {condition && (
+                        <span className="px-3 py-1 bg-gray-100 rounded-full text-sm">
+                            Condition: {condition}
+                        </span>
+                    )}
+                    {(minPrice || maxPrice) && (
+                        <span className="px-3 py-1 bg-gray-100 rounded-full text-sm">
+                            Price: {minPrice || '0'} - {maxPrice || '∞'}
+                        </span>
+                    )}
+                </div>
+            )}
 
             {isLoading ? (
                 <div className="flex justify-center items-center min-h-[400px]">

@@ -1,4 +1,4 @@
-const asyncHandler = require('express-async-handler');
+entconst asyncHandler = require('express-async-handler');
 const slugify = require('slugify');
 const cloudinary = require('cloudinary').v2;    
 const Product = require('../models/productModels');
@@ -24,19 +24,30 @@ const getTimeLeft = (endTime) => {
 // Search products
 const searchProducts = asyncHandler(async (req, res) => {
     try {
-        const { query } = req.query;
+        const { query, category, minPrice, maxPrice, condition } = req.query;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 20;
         const skip = (page - 1) * limit;
 
         // Base criteria for active auctions
-        const searchCriteria = {
+        const baseCriteria = {
             isArchived: false,
             isSoldOut: false,
             auctionEndTime: { $gt: new Date() }
         };
 
-        // Add text search if query provided
+        // Add filters if provided
+        if (category && category !== 'All') baseCriteria.category = category;
+        if (condition) baseCriteria.condition = condition;
+        if (minPrice || maxPrice) {
+            baseCriteria.price = {};
+            if (minPrice) baseCriteria.price.$gte = parseFloat(minPrice);
+            if (maxPrice) baseCriteria.price.$lte = parseFloat(maxPrice);
+        }
+
+        // Build search criteria
+        let searchCriteria = { ...baseCriteria };
+        
         if (query) {
             searchCriteria.$or = [
                 { title: { $regex: query, $options: 'i' } },
