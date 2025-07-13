@@ -1,0 +1,60 @@
+/* Bidding History Animations */
+
+.bidding-history-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.bid-entry {
+    transition: all 0.4s ease-in-out;
+}
+
+/* Animation for new bids appearing at the top */
+.new-bid {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Animation for existing bids moving down */
+.bidding-history-container:not(:empty) .new-bid ~ .bid-entry:not(.new-bid) {
+    animation: slideDown 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Add a subtle highlight effect for new bids */
+.new-bid {
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    border-left: 3px solid #3b82f6;
+}
+
+/* Remove spinner arrows from number inputs */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+} 

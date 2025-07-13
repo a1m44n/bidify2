@@ -1,0 +1,26 @@
+/*
+in user models look at role schema. there are 3 roles; seller, buyer, and admin.
+in report, plan to only use 2 which are buyer and seller
+
+
+look at commision balance schema
+
+
+in routes>userRoute.js look at 
+    const { protect, isAdmin } = require("../middleware/authMiddleware");
+    it is either authMiddleware or authMiddleWare 
+
+
+external libraries used - multer, bcrypt
+
+
+function below get all products by all users instead of only admin 
+    const getAllProductsByAdmin = asyncHandler(async (req, res) => {
+        const products = await Product.find({}).sort("-createdAt").populate("user");
+
+        res.json(products);
+    });
+
+
+Look at files in models folder. Make sure naming is consistent.
+*/

@@ -1,0 +1,20 @@
+{
+  "name": "bidify",
+  "version": "1.0.0",
+  "description": "Online Auction Platform",
+  "main": "backend/server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "cd backend && node server.js",
+    "dev": "cd backend && npm run dev",
+    "install-backend": "cd backend && npm install",
+    "install-frontend": "cd client && npm install",
+    "build-frontend": "cd client && npm run build"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "mongoose": "^8.14.1"
+  }
+}
