@@ -4,6 +4,7 @@ import { Container, Heading } from "../../components/common/Design";
 import { CategoryCard } from "../../components/cards/CategoryCard";
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { FaThLarge } from 'react-icons/fa';
+import API_URL from '../../config/api';
 
 export const CategorySlider = ({ onCategorySelect }) => {
     const [categories, setCategories] = useState([]);
@@ -15,7 +16,7 @@ export const CategorySlider = ({ onCategorySelect }) => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await axios.get("/api/category");
+                const res = await axios.get(`${API_URL}/api/category`);
                 if (res.data && Array.isArray(res.data)) {
                     setCategories(res.data);
                 } else {
