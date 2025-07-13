@@ -85,13 +85,6 @@ export const SearchBox = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [filters, setFilters] = useState({
-        category: '',
-        minPrice: '',
-        maxPrice: '',
-        condition: ''
-    });
-    const [showFilters, setShowFilters] = useState(false);
     const searchDebounce = useRef(null);
 
     // Handle search input with suggestions
@@ -126,10 +119,11 @@ export const SearchBox = () => {
         setSuggestions([]); // Clear suggestions when search is submitted
 
         try {
-            const queryParams = new URLSearchParams({
-                query: searchQuery,
-                ...filters
-            });
+            // Only pass the search query, no filters
+            const queryParams = new URLSearchParams();
+            if (searchQuery.trim()) {
+                queryParams.append('query', searchQuery.trim());
+            }
 
             // Redirect to search results page with query parameters
             window.location.href = `/search?${queryParams.toString()}`;
@@ -169,14 +163,7 @@ export const SearchBox = () => {
                         className="block shadow-md w-full p-6 ps-16 text-sm text-gray-800 rounded-full bg-gray-50 outline-none"
                         placeholder="Search product..."
                     />
-                    <div className="absolute end-2.5 bottom-2 flex gap-2">
-                        {/* <button
-                            type="button"
-                            onClick={() => setShowFilters(!showFilters)}
-                            className="px-4 py-2 text-gray-600 hover:text-gray-800"
-                        >
-                            Filters
-                        </button> */}
+                    <div className="absolute end-2.5 bottom-2">
                         <PrimaryButton 
                             type="submit"
                             disabled={isLoading}

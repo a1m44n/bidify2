@@ -24,30 +24,19 @@ const getTimeLeft = (endTime) => {
 // Search products
 const searchProducts = asyncHandler(async (req, res) => {
     try {
-        const { query, category, minPrice, maxPrice, condition } = req.query;
+        const { query } = req.query;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 20;
         const skip = (page - 1) * limit;
 
         // Base criteria for active auctions
-        const baseCriteria = {
+        const searchCriteria = {
             isArchived: false,
             isSoldOut: false,
             auctionEndTime: { $gt: new Date() }
         };
 
-        // Add filters if provided
-        if (category && category !== 'All') baseCriteria.category = category;
-        if (condition) baseCriteria.condition = condition;
-        if (minPrice || maxPrice) {
-            baseCriteria.price = {};
-            if (minPrice) baseCriteria.price.$gte = parseFloat(minPrice);
-            if (maxPrice) baseCriteria.price.$lte = parseFloat(maxPrice);
-        }
-
-        // Build search criteria
-        let searchCriteria = { ...baseCriteria };
-        
+        // Add text search if query provided
         if (query) {
             searchCriteria.$or = [
                 { title: { $regex: query, $options: 'i' } },
